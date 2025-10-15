@@ -58,7 +58,8 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 0.62
-    - _Speed: 1
+    - _Speed: 0.78
+    - _scale: 0.1
     m_Colors:
     - _Albedo: {r: 0.9559748, g: 0.89185876, b: 0.5561488, a: 0}
   m_BuildTextureStacks: []
