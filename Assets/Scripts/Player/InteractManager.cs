@@ -1,14 +1,25 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InteractManager : MonoBehaviour
 {
-    void Start()
+    public InputActionReference interactActionRef;
+
+    void OnEnable()
     {
-        
+        interactActionRef.action.performed += OnInteract;
+        interactActionRef.action.Enable();
     }
-    
-    void Update()
+
+    void OnDisable()
     {
-        Debug.Log("Téma la taille du pipi");
+        interactActionRef.action.performed -= OnInteract;
+        interactActionRef.action.Disable();
+    }
+
+    void OnInteract(InputAction.CallbackContext ctx)
+    {
+        Debug.Log("J'intéragis eheh");
     }
 }
+

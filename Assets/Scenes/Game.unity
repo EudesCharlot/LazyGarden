@@ -881,9 +881,10 @@ GameObject:
   - component: {fileID: 548040850}
   - component: {fileID: 548040855}
   - component: {fileID: 548040856}
+  - component: {fileID: 548040857}
   m_Layer: 0
   m_Name: Player_Drone
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1012,6 +1013,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Xlimits: {x: -13, y: 10}
   Zlimits: {x: -6.2, y: 6.2}
+--- !u!114 &548040857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548040848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 170c5b731a8f96941a50118b6d64614f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactActionRef: {fileID: -4840387590770830072, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1001 &717741168
 PrefabInstance:
   m_ObjectHideFlags: 0
