@@ -1,28 +1,27 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody rb;
-    public float movementX;
-    public float movementY;
+    public InputActionReference moveActionRef;
     public float speed = 1;
+    public float rotationSpeed = 1;
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        
     }
     
-    void FixedUpdate()
+    void Update()
     {
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-        rb.MovePosition(rb.position + movement * (speed * Time.fixedDeltaTime));
+        Vector2 stickDirection = moveActionRef.action.ReadValue<Vector2>();
+        transform.Translate(new(stickDirection.x * speed * Time.deltaTime,0,stickDirection.y * speed * Time.deltaTime),Space.Self);
+        transform.Rotate(Vector3.up, stickDirection.x * rotationSpeed * Time.deltaTime);
     }
     
-    private void OnMove(InputValue movementValue)
+
+    public float GetSpeed()
     {
-        Vector2 movementVector = movementValue.Get<Vector2>();
- 
-        movementX = movementVector.x;
-        movementY = movementVector.y;
+        return speed;
     }
 }
