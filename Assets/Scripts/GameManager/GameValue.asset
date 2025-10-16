@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff8beb9deae87248a6b5cace8d71036, type: 3}
+  m_Name: GameValue
+  m_EditorClassIdentifier: 
+  allPlantTimers:
+  - subType: 0
+    timers:
+      timeNextState: 60
+      timeDried: 120
+      timeFlood: 30
+      timeDead: 180
+  - subType: 1
+    timers:
+      timeNextState: 120
+      timeDried: 240
+      timeFlood: 60
+      timeDead: 300
+  - subType: 2
+    timers:
+      timeNextState: 45
+      timeDried: 90
+      timeFlood: 20
+      timeDead: 120
+  - subType: 3
+    timers:
+      timeNextState: 150
+      timeDried: 300
+      timeFlood: 60
+      timeDead: 360
+  - subType: 4
+    timers:
+      timeNextState: 130
+      timeDried: 260
+      timeFlood: 50
+      timeDead: 320
+  - subType: 5
+    timers:
+      timeNextState: 50
+      timeDried: 100
+      timeFlood: 25
+      timeDead: 150
+  - subType: 6
+    timers:
+      timeNextState: 40
+      timeDried: 80
+      timeFlood: 20
+      timeDead: 120
+  - subType: 7
+    timers:
+      timeNextState: 70
+      timeDried: 140
+      timeFlood: 30
+      timeDead: 200
+  - subType: 8
+    timers:
+      timeNextState: 90
+      timeDried: 180
+      timeFlood: 40
+      timeDead: 240
+  - subType: 9
+    timers:
+      timeNextState: 35
+      timeDried: 70
+      timeFlood: 15
+      timeDead: 100

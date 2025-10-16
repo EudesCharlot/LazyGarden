@@ -6,8 +6,8 @@ public class GameTimeManager : MonoBehaviour
     public static GameTimeManager Instance { get; private set; }
 
     [Header("Durée du cycle complet")]
-    public float dayDuration = 300f;   // Durée réelle pour la période de jour (6h-21h, 15h jeu)
-    public float nightDuration = 180f; // Durée réelle pour la période de nuit (21h-6h, 9h jeu)
+    public float dayDuration = 300f;   
+    public float nightDuration = 300f; 
 
     [Header("Heure de début")]
     [Range(0, 24)] public int startHour = 6;
@@ -20,23 +20,26 @@ public class GameTimeManager : MonoBehaviour
     public event Action<bool> OnDayNightChanged;
     private bool lastIsDay;
 
-    private float accumulatedTime; // Accumule le temps réel pour progression (en minutes jeu fractionnelles)
-    private float totalGameMinutes; // Total de minutes jeu entières écoulées depuis le début
-    private float currentTimeSpeed = 1f; // Vitesse actuelle (minutes jeu par seconde réelle)
+    private float accumulatedTime;
+    private float totalGameMinutes; 
+    private float currentTimeSpeed = 1f;
 
-    public float CurrentTime => totalGameMinutes / 60f % 24f; // Heure fractionnelle (0-24) basée sur minutes entières
-    public float SmoothGameMinutes => totalGameMinutes + accumulatedTime; // Minutes jeu smooth pour animations
-    public float SmoothCurrentTime => SmoothGameMinutes / 60f % 24f; // Heure fractionnelle smooth
+    public float CurrentTime => totalGameMinutes / 60f % 24f; 
+    public float SmoothGameMinutes => totalGameMinutes + accumulatedTime;
+    public float SmoothCurrentTime => SmoothGameMinutes / 60f % 24f;
+
+    public int dayCounter;
+    private bool lastDayChecked = false;
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        totalGameMinutes = startHour * 60f + startMinute; // Initialisation
+        totalGameMinutes = startHour * 60f + startMinute; 
         UpdateHourMinute();
         lastIsDay = IsDay;
-        UpdateTimeSpeed(); // Initialiser la vitesse
+        UpdateTimeSpeed();
     }
 
     void Update()
@@ -49,13 +52,24 @@ public class GameTimeManager : MonoBehaviour
             totalGameMinutes += minutesToAdd;
             accumulatedTime -= minutesToAdd;
             UpdateHourMinute();
-            UpdateTimeSpeed(); // Vérifier si on change de période
+            UpdateTimeSpeed(); 
 
             if (IsDay != lastIsDay)
             {
                 OnDayNightChanged?.Invoke(IsDay);
                 lastIsDay = IsDay;
             }
+        }
+        
+        if (CurrentHour == 0 && !lastDayChecked)
+        {
+            dayCounter++;
+            lastDayChecked = true;
+            Debug.Log("Jour " + dayCounter);
+        }
+        else if (CurrentHour != 0)
+        {
+            lastDayChecked = false;
         }
     }
 
@@ -68,13 +82,36 @@ public class GameTimeManager : MonoBehaviour
 
     private void UpdateTimeSpeed()
     {
-        float gameDayHours = 15f; // 6h à 21h
-        float gameNightHours = 9f; // 21h à 6h
+        float gameDayHours = 15f; 
+        float gameNightHours = 9f; 
         currentTimeSpeed = IsDay ? (gameDayHours * 60f / dayDuration) : (gameNightHours * 60f / nightDuration);
     }
 
     public float GetNormalizedTime()
     {
         return (totalGameMinutes % (24f * 60f)) / (24f * 60f);
+    }
+    
+    public string GetTimeString()
+    {
+        int hours = Mathf.FloorToInt(CurrentTime); 
+        int minutes = Mathf.FloorToInt((CurrentTime - hours) * 60f); 
+
+        return string.Format("{0:00}:{1:00}", hours, minutes);
+    }
+    
+    public string GetTimeStringRounded()
+    {
+        int hours = Mathf.FloorToInt(CurrentTime);
+        
+        int minutes = Mathf.FloorToInt((CurrentTime - hours) * 60f);
+        minutes = (minutes / 10) * 10;
+
+        return string.Format("{0}:{1:00}", hours, minutes);
+    }
+
+    public int getDayCounter()
+    {
+        return dayCounter;
     }
 }

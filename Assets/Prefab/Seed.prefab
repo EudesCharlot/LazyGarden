@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 5914327468544389462}
   - component: {fileID: 3367588730050499522}
   - component: {fileID: 6472103829815108745}
+  - component: {fileID: 1954353112419894439}
   m_Layer: 0
   m_Name: Seed
-  m_TagString: Untagged
+  m_TagString: Seed
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.35438707, y: 0.21455994, z: 0.44315}
+  m_LocalScale: {x: 0.5947678, y: 0.21455994, z: 0.59032017}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5981869357701047935}
@@ -87,6 +88,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1954353112419894439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918099016286400654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7801b9d0d731bba4099f7bd2f29b86f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  plantType: 0
+  subType: 0
+  gameValue: {fileID: 11400000, guid: dad1ef03d8d9e4440b4099a7ad687816, type: 2}
 --- !u!1 &6158016422189355849
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,8 +116,8 @@ GameObject:
   - component: {fileID: 3911168683179006635}
   - component: {fileID: 8864187425115715510}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: HitBox
+  m_TagString: SeedCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -114,8 +131,8 @@ Transform:
   m_GameObject: {fileID: 6158016422189355849}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 8.34, z: 0}
-  m_LocalScale: {x: 4.0632734, y: 18.836788, z: 3.2986}
+  m_LocalPosition: {x: 0, y: 25.4, z: 0}
+  m_LocalScale: {x: 4.0632734, y: 52.59231, z: 3.2986}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5914327468544389462}
@@ -143,7 +160,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
