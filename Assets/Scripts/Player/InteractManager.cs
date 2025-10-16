@@ -13,6 +13,7 @@ public class InteractManager : MonoBehaviour
 
     void OnEnable()
     {
+        Debug.Log("OnEnable");
         interactActionRef.action.performed += OnInteract;
         droneCollider = GetComponent<MeshCollider>();
     }
@@ -41,6 +42,7 @@ public class InteractManager : MonoBehaviour
 
         if (currentSeed != null)
         {   
+            Debug.Log("Pas de place");
             currentSeedManager = currentSeed.GetComponent<seedManager>();
             currentSeedManager.waterPlant();
             return;

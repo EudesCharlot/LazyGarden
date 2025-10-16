@@ -38,7 +38,7 @@ public class PlantTimers
 {
     public float timeNextState;  // Temps pour passer à l'état suivant 
     public float timeDried;      // Temps avant de devenir Dried
-    public float timeFlood;      // Temps avant Flood si trop arrosé
+    public float timeFlood;      // nb avant Flood si trop arrosé
     public float timeDead;       // Temps avant Dead après Dried
 }
 
@@ -55,19 +55,20 @@ public class GameValue : ScriptableObject
     public List<PlantSubTypeTimers> allPlantTimers = new List<PlantSubTypeTimers>()
     {
         // Fruits
-        new PlantSubTypeTimers { subType = PlantSubType.Tomatoes, timers = new PlantTimers { timeNextState = 60f, timeDried = 120f, timeFlood = 30f, timeDead = 180f } },
-        new PlantSubTypeTimers { subType = PlantSubType.Apple, timers = new PlantTimers { timeNextState = 120f, timeDried = 240f, timeFlood = 60f, timeDead = 300f } },
-        new PlantSubTypeTimers { subType = PlantSubType.Strawberry, timers = new PlantTimers { timeNextState = 45f, timeDried = 90f, timeFlood = 20f, timeDead = 120f } },
-        new PlantSubTypeTimers { subType = PlantSubType.Banana, timers = new PlantTimers { timeNextState = 150f, timeDried = 300f, timeFlood = 60f, timeDead = 360f } },
-        new PlantSubTypeTimers { subType = PlantSubType.Orange, timers = new PlantTimers { timeNextState = 130f, timeDried = 260f, timeFlood = 50f, timeDead = 320f } },
+        new PlantSubTypeTimers { subType = PlantSubType.Tomatoes, timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 4, timeDead = 5 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Apple, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 6, timeDead = 6 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Strawberry, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 5, timeDead = 4 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Banana, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 6, timeDead = 6 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Orange, timers = new PlantTimers { timeNextState = 4, timeDried = 1, timeFlood = 5, timeDead = 5 } },
 
         // Légumes
-        new PlantSubTypeTimers { subType = PlantSubType.Carrot, timers = new PlantTimers { timeNextState = 50f, timeDried = 100f, timeFlood = 25f, timeDead = 150f } },
-        new PlantSubTypeTimers { subType = PlantSubType.Lettuce, timers = new PlantTimers { timeNextState = 40f, timeDried = 80f, timeFlood = 20f, timeDead = 120f } },
-        new PlantSubTypeTimers { subType = PlantSubType.Cucumber, timers = new PlantTimers { timeNextState = 70f, timeDried = 140f, timeFlood = 30f, timeDead = 200f } },
-        new PlantSubTypeTimers { subType = PlantSubType.Broccoli, timers = new PlantTimers { timeNextState = 90f, timeDried = 180f, timeFlood = 40f, timeDead = 240f } },
-        new PlantSubTypeTimers { subType = PlantSubType.Spinach, timers = new PlantTimers { timeNextState = 35f, timeDried = 70f, timeFlood = 15f, timeDead = 100f } }
+        new PlantSubTypeTimers { subType = PlantSubType.Carrot, timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 2, timeDead = 2 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Lettuce, timers = new PlantTimers { timeNextState = 1, timeDried = 1, timeFlood = 2, timeDead = 1 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Cucumber, timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 3, timeDead = 2 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Broccoli, timers = new PlantTimers { timeNextState = 3, timeDried = 1, timeFlood = 2, timeDead = 2 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Spinach, timers = new PlantTimers { timeNextState = 1, timeDried = 1, timeFlood = 2, timeDead = 1 } }
     };
+
     
     public PlantTimers GetTimers(PlantSubType subtype)
     {

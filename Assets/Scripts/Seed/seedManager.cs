@@ -11,14 +11,17 @@ public class seedManager : MonoBehaviour
     private PlantTimers plantTimers;
     
     private GameTimeManager gameTimeManager = GameTimeManager.Instance;
-    private float timeLastWaterd;
-    private float timeLastState;
+    private float dayLastWaterd;
+    private float dayLastState;
+    private int waterCount;
+    
     void OnEnable()
     {
         state =  PlantState.Seed;
-        timeLastWaterd = gameTimeManager.GetNormalizedTime();
-        timeLastState = gameTimeManager.GetNormalizedTime();
+        dayLastWaterd = gameTimeManager.GetNormalizedTime();
+        dayLastState = gameTimeManager.GetNormalizedTime();
         plantTimers = gameValue.GetTimers(subType);
+        waterCount = 0;
     }
     
     void Update()
@@ -28,8 +31,18 @@ public class seedManager : MonoBehaviour
 
     public void waterPlant()
     {
-        timeLastWaterd = gameTimeManager.GetNormalizedTime();
+        dayLastWaterd = gameTimeManager.GetNormalizedTime();
         Debug.Log("Plante bien arrosé !");
+        
+        waterCount++;
+        if (state == PlantState.Flood)
+        {
+            Dead();
+            return;
+        }
+            
+        if (waterCount == plantTimers.timeFlood)
+            Flooded();
     }
 
     void nextState()
@@ -46,15 +59,15 @@ public class seedManager : MonoBehaviour
                 state = PlantState.Mature;
                 break;
         }
-        timeLastState = gameTimeManager.GetNormalizedTime();
+        dayLastState = gameTimeManager.GetNormalizedTime();
     }
 
-    void flooded()
+    void Flooded()
     {
         state =  PlantState.Flood;
     }
 
-    void dried()
+    void Dried()
     {
         state = PlantState.Dried;
     }
