@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+
 public enum PlantState
 {
     Seed,
@@ -33,13 +34,14 @@ public enum PlantSubType
     Broccoli,
     Spinach
 }
+
 [System.Serializable]
 public class PlantTimers
 {
-    public float timeNextState;  // Temps pour passer à l'état suivant 
-    public float timeDried;      // Temps avant de devenir Dried
-    public float timeFlood;      // nb avant Flood si trop arrosé
-    public float timeDead;       // Temps avant Dead après Dried
+    public int timeNextState;  // en jours
+    public int timeDried;      // en jours
+    public int timeFlood;      // nb d'arrosages avant Flood
+    public int timeDead;       // nb de jours après Dried avant Dead
 }
 
 [System.Serializable]
@@ -47,6 +49,20 @@ public class PlantSubTypeTimers
 {
     public PlantSubType subType;
     public PlantTimers timers;
+}
+
+[System.Serializable]
+public class PlantImages
+{
+    public Sprite seedSprite;   // Sprite de la graine
+    public Sprite plantSprite;  // Sprite de la plante mature
+}
+
+[System.Serializable]
+public class PlantSubTypeImage
+{
+    public PlantSubType subType;
+    public PlantImages plantImages;
 }
 
 [CreateAssetMenu(fileName = "GameValue", menuName = "Scriptable Objects/GameValue")]
@@ -69,10 +85,15 @@ public class GameValue : ScriptableObject
         new PlantSubTypeTimers { subType = PlantSubType.Spinach, timers = new PlantTimers { timeNextState = 1, timeDried = 1, timeFlood = 2, timeDead = 1 } }
     };
 
-    
+    public List<PlantSubTypeImage> allPlantImages = new List<PlantSubTypeImage>();
+
     public PlantTimers GetTimers(PlantSubType subtype)
     {
         return allPlantTimers.Find(p => p.subType == subtype)?.timers;
     }
-}
 
+    public PlantImages GetImages(PlantSubType subtype)
+    {
+        return allPlantImages.Find(p => p.subType == subtype)?.plantImages;
+    }
+}

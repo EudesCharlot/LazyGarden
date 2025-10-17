@@ -73,3 +73,8 @@ MonoBehaviour:
       timeDried: 70
       timeFlood: 15
       timeDead: 100
+  allPlantImages:
+  - subType: 0
+    plantImages:
+      seedSprite: {fileID: 0}
+      plantSprite: {fileID: 0}
