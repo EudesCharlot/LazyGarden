@@ -8,12 +8,11 @@ public class InteractManager : MonoBehaviour
 
     private GameObject currentSeed;
     private MeshCollider droneCollider;
-
     private seedManager currentSeedManager;
+    private bool isNearSeed = false; 
 
     void OnEnable()
     {
-        Debug.Log("OnEnable");
         interactActionRef.action.performed += OnInteract;
         droneCollider = GetComponent<MeshCollider>();
     }
@@ -25,35 +24,48 @@ public class InteractManager : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("SeedCollider"))
+        if (other.CompareTag("Seed"))
         {
-            currentSeed = other.transform.parent.gameObject;
+            isNearSeed = true;
+            currentSeed = other.gameObject;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        currentSeed = null;
+        if (other.CompareTag("Seed") && other.gameObject == currentSeed)
+        {
+            isNearSeed = false;
+            currentSeed = null;
+        }
     }
 
     void OnInteract(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed) return;
-
-        if (currentSeed != null)
-        {   
-            Debug.Log("Pas de place");
+        
+        if (isNearSeed && currentSeed != null)
+        {
             currentSeedManager = currentSeed.GetComponent<seedManager>();
-            currentSeedManager.waterPlant();
+            currentSeedManager.Interact();
             return;
+        }
+        
+        Collider[] nearbySeeds = Physics.OverlapSphere(transform.position, 0.5f);
+        foreach (var col in nearbySeeds)
+        {
+            if (col.CompareTag("Seed"))
+            {
+                Debug.Log("Impossible de planter ici : une graine est déjà présente !");
+                return;
+            }
         }
 
         Vector3 seedPos = new Vector3(transform.position.x, -15.8f, transform.position.z);
         GameObject newSeed = Instantiate(seedPrefab, seedPos, transform.rotation);
-        
         newSeed.tag = "Seed";
-        currentSeedManager = newSeed.GetComponent<seedManager>();
-        //currentSeedManager.subType = graine Séléctionné Par Le Joueur
+        currentSeed = newSeed;
+        currentSeedManager = currentSeed.GetComponent<seedManager>();
 
         Debug.Log("Nouvelle graine plantée !");
     }

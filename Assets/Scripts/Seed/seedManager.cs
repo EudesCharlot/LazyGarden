@@ -29,7 +29,7 @@ public class seedManager : MonoBehaviour
         float time = gameTimeManager.GetNormalizedTime();
     }
 
-    public void waterPlant()
+    void waterPlant()
     {
         dayLastWaterd = gameTimeManager.GetNormalizedTime();
         Debug.Log("Plante bien arrosé !");
@@ -76,7 +76,21 @@ public class seedManager : MonoBehaviour
     {
         state = PlantState.Dead;
     }
-    
+
+    void Recolt()
+    {
+        
+    }
+
+    public void Interact()
+    {
+        if (state == PlantState.Mature)
+        {
+            Recolt();
+            return;
+        }
+        waterPlant();
+    }
     
     
 }

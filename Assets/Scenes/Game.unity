@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 543393c4d7bd0cf42897b82195e75dba, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -452,7 +452,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dayDuration: 300
   nightDuration: 300
-  startHour: 19
+  startHour: 5
   startMinute: 0
   dayCounter: 0
 --- !u!4 &155329579
@@ -889,8 +889,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sunLight: {fileID: 410087040}
   maxIntensity: 1.5
-  dawnDurationHours: 0.5
-  duskDurationHours: 0.5
+  rotationLerpSpeed: 5
   intensityLerpSpeed: 5
 --- !u!1 &423308198
 GameObject:
@@ -1179,8 +1178,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactActionRef: {fileID: -4840387590770830072, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   seedPrefab: {fileID: 1918099016286400654, guid: 9bd321bd43d2b95418ac9d3415e09c9d, type: 3}
---- !u!64 &548040858
-MeshCollider:
+--- !u!136 &548040858
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1197,10 +1196,11 @@ MeshCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &765793103
 GameObject:
   m_ObjectHideFlags: 0

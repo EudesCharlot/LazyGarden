@@ -4,85 +4,53 @@ public class SunController : MonoBehaviour
 {
     public Light sunLight;
     [Range(0f, 1.5f)] public float maxIntensity = 1.2f;
-    [SerializeField] private float dawnDurationHours = 0.5f; 
-    [SerializeField] private float duskDurationHours = 0.5f; 
-    [SerializeField] private float intensityLerpSpeed = 5f; 
+    [SerializeField] private float rotationLerpSpeed = 5f;
+    [SerializeField] private float intensityLerpSpeed = 5f;
 
-    private float currentIntensity; 
+    private float currentAngle = 0f;
+    private float currentIntensity = 0f;
+    private bool wasDayLastFrame = false;
 
     void Start()
     {
-        if (sunLight != null)
-            currentIntensity = sunLight.intensity;
-        else
+        if (sunLight == null)
+        {
             Debug.LogError("SunLight non assigné dans SunController !");
+            enabled = false; 
+        }
     }
 
     void Update()
     {
-        if (sunLight == null) return;
+        float normalizedTime = GameTimeManager.Instance.GetNormalizedTime(); 
+        bool isDay = GameTimeManager.Instance.IsDay; 
 
-        float currentTime = GameTimeManager.Instance.SmoothCurrentTime; 
-        bool isDay = GameTimeManager.Instance.IsDay;
-        
-        float dayStartHour = 6f;
-        float dayEndHour = 21f;
-        float dawnStartHour = dayStartHour - dawnDurationHours; 
-        float duskEndHour = dayEndHour + duskDurationHours; 
-        float dayDurationHours = dayEndHour - dayStartHour; 
-        float midDayHour = (dayStartHour + dayEndHour) / 2f; 
+        float targetAngle;
+        float targetIntensity;
 
-        float sunAngle = -90f; 
-
-        if (currentTime >= dawnStartHour && currentTime < dayStartHour)
+        if (isDay)
         {
-            // Dawn: -90° à 0°
-            float t = (currentTime - dawnStartHour) / dawnDurationHours;
-            sunAngle = -90f + 90f * Mathf.SmoothStep(0f, 1f, t);
+            if (!wasDayLastFrame)
+            {
+                currentAngle = 0f; 
+            }
+            
+            float dayProgress = Mathf.InverseLerp(0.25f, 0.875f, normalizedTime);
+            targetAngle = Mathf.Lerp(0f, 180f, dayProgress);
+            targetIntensity = maxIntensity;
         }
-        else if (currentTime >= dayStartHour && currentTime < dayEndHour)
+        else
         {
-            float dayProgress = (currentTime - dayStartHour) / dayDurationHours; 
-            sunAngle = Mathf.Sin(dayProgress * Mathf.PI) * 90f;
-        }
-        else if (currentTime >= dayEndHour && currentTime < duskEndHour)
-        {
-            float t = (currentTime - dayEndHour) / duskDurationHours;
-            sunAngle = 0f - 90f * Mathf.SmoothStep(0f, 1f, t);
-        }
-
-        sunLight.transform.rotation = Quaternion.Euler(sunAngle, 0f, 0f);
-        
-        float targetIntensity = 0f;
-        if (currentTime >= dawnStartHour && currentTime < dayStartHour)
-        {
-            float t = (currentTime - dawnStartHour) / dawnDurationHours;
-            targetIntensity = Mathf.SmoothStep(0f, 0.5f * maxIntensity, t);
-        }
-        else if (currentTime >= dayStartHour && currentTime < midDayHour)
-        {
-            float t = (currentTime - dayStartHour) / (midDayHour - dayStartHour);
-            targetIntensity = Mathf.SmoothStep(0.5f * maxIntensity, maxIntensity, t);
-        }
-        else if (currentTime >= midDayHour && currentTime < dayEndHour)
-        {
-            float t = (currentTime - midDayHour) / (dayEndHour - midDayHour);
-            targetIntensity = Mathf.SmoothStep(maxIntensity, 0.5f * maxIntensity, t);
-        }
-        else if (currentTime >= dayEndHour && currentTime < duskEndHour)
-        {
-            float t = (currentTime - dayEndHour) / duskDurationHours;
-            targetIntensity = Mathf.SmoothStep(0.5f * maxIntensity, 0f, t);
+            targetAngle = 180f;
+            targetIntensity = 0f;
         }
         
+        wasDayLastFrame = isDay;
+        
+        currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * rotationLerpSpeed);
         currentIntensity = Mathf.Lerp(currentIntensity, targetIntensity, Time.deltaTime * intensityLerpSpeed);
         
-        if (targetIntensity == 0f && currentIntensity < 1e-6f)
-        {
-            currentIntensity = 0f;
-        }
-
+        sunLight.transform.rotation = Quaternion.Euler(currentAngle, 0f, 0f);
         sunLight.intensity = currentIntensity;
-        
     }
 }

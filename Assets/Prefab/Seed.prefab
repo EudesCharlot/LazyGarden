@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3367588730050499522}
   - component: {fileID: 6472103829815108745}
   - component: {fileID: 1954353112419894439}
+  - component: {fileID: 4342266823345446819}
   m_Layer: 0
   m_Name: Seed
   m_TagString: Seed
@@ -31,8 +32,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5947678, y: 0.21455994, z: 0.59032017}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5981869357701047935}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3367588730050499522
@@ -104,54 +104,13 @@ MonoBehaviour:
   plantType: 0
   subType: 0
   gameValue: {fileID: 11400000, guid: dad1ef03d8d9e4440b4099a7ad687816, type: 2}
---- !u!1 &6158016422189355849
-GameObject:
+--- !u!136 &4342266823345446819
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5981869357701047935}
-  - component: {fileID: 3911168683179006635}
-  - component: {fileID: 8864187425115715510}
-  m_Layer: 0
-  m_Name: HitBox
-  m_TagString: SeedCollider
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5981869357701047935
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6158016422189355849}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 25.4, z: 0}
-  m_LocalScale: {x: 4.0632734, y: 52.59231, z: 3.2986}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5914327468544389462}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3911168683179006635
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6158016422189355849}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &8864187425115715510
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6158016422189355849}
+  m_GameObject: {fileID: 1918099016286400654}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -163,6 +122,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.99999994, y: 0.99999994, z: 1}
-  m_Center: {x: 0, y: 0.00000095367426, z: 0}
+  serializedVersion: 2
+  m_Radius: 3.07
+  m_Height: 39.02
+  m_Direction: 1
+  m_Center: {x: 0, y: 17.4, z: 0}
