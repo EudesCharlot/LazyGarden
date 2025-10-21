@@ -21,9 +21,9 @@ public enum PlantType
 public enum PlantSubType
 {
     // Fruits
-    Tomatoes,
+    GoldenApple,
     Apple,
-    Strawberry,
+    Cherry,
     Banana,
     Orange,
 
@@ -32,7 +32,7 @@ public enum PlantSubType
     Lettuce,
     Cucumber,
     Broccoli,
-    Spinach
+    GoldenCarrot
 }
 
 [System.Serializable]
@@ -71,9 +71,9 @@ public class GameValue : ScriptableObject
     public List<PlantSubTypeTimers> allPlantTimers = new List<PlantSubTypeTimers>()
     {
         // Fruits
-        new PlantSubTypeTimers { subType = PlantSubType.Tomatoes, timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 4, timeDead = 5 } },
+        new PlantSubTypeTimers { subType = PlantSubType.GoldenApple, timers = new PlantTimers { timeNextState = 10, timeDried = 1, timeFlood = 1, timeDead = 1 } },
         new PlantSubTypeTimers { subType = PlantSubType.Apple, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 6, timeDead = 6 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Strawberry, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 5, timeDead = 4 } },
+        new PlantSubTypeTimers { subType = PlantSubType.Cherry, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 5, timeDead = 4 } },
         new PlantSubTypeTimers { subType = PlantSubType.Banana, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 6, timeDead = 6 } },
         new PlantSubTypeTimers { subType = PlantSubType.Orange, timers = new PlantTimers { timeNextState = 4, timeDried = 1, timeFlood = 5, timeDead = 5 } },
 
@@ -82,7 +82,7 @@ public class GameValue : ScriptableObject
         new PlantSubTypeTimers { subType = PlantSubType.Lettuce, timers = new PlantTimers { timeNextState = 1, timeDried = 1, timeFlood = 2, timeDead = 1 } },
         new PlantSubTypeTimers { subType = PlantSubType.Cucumber, timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 3, timeDead = 2 } },
         new PlantSubTypeTimers { subType = PlantSubType.Broccoli, timers = new PlantTimers { timeNextState = 3, timeDried = 1, timeFlood = 2, timeDead = 2 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Spinach, timers = new PlantTimers { timeNextState = 1, timeDried = 1, timeFlood = 2, timeDead = 1 } }
+        new PlantSubTypeTimers { subType = PlantSubType.GoldenCarrot, timers = new PlantTimers { timeNextState = 7, timeDried = 1, timeFlood = 1, timeDead = 1 } }
     };
 
     public List<PlantSubTypeImage> allPlantImages = new List<PlantSubTypeImage>();

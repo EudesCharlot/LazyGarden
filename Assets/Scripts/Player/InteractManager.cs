@@ -62,11 +62,11 @@ public class InteractManager : MonoBehaviour
         }
 
         Vector3 seedPos = new Vector3(transform.position.x, -15.8f, transform.position.z);
-        GameObject newSeed = Instantiate(seedPrefab, seedPos, transform.rotation);
+        GameObject newSeed = Instantiate(seedPrefab, seedPos, Quaternion.identity);
         newSeed.tag = "Seed";
         currentSeed = newSeed;
         currentSeedManager = currentSeed.GetComponent<seedManager>();
-
+        //currentSeedManager.subType = séléctionné par le joueur
         Debug.Log("Nouvelle graine plantée !");
     }
 }

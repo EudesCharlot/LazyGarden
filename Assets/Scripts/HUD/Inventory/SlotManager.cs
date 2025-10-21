@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-enum SlotType
+public enum SlotType
 {
     Seed,
     Plant
