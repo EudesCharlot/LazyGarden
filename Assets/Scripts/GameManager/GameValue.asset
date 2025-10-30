@@ -9,72 +9,75 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bff8beb9deae87248a6b5cace8d71036, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e81d5e0222ea2646a8905350e8b4c9a, type: 3}
   m_Name: GameValue
   m_EditorClassIdentifier: 
   allPlantTimers:
   - subType: 0
     timers:
-      timeNextState: 60
-      timeDried: 120
-      timeFlood: 30
-      timeDead: 180
+      timeNextState: 1
+      timeDried: 1
+      timeFlood: 1
+      timeDead: 1
   - subType: 1
     timers:
-      timeNextState: 120
-      timeDried: 240
-      timeFlood: 60
-      timeDead: 300
+      timeNextState: 5
+      timeDried: 1
+      timeFlood: 6
+      timeDead: 6
   - subType: 2
     timers:
-      timeNextState: 45
-      timeDried: 90
-      timeFlood: 20
-      timeDead: 120
+      timeNextState: 5
+      timeDried: 1
+      timeFlood: 5
+      timeDead: 4
   - subType: 3
     timers:
-      timeNextState: 150
-      timeDried: 300
-      timeFlood: 60
-      timeDead: 360
+      timeNextState: 5
+      timeDried: 1
+      timeFlood: 6
+      timeDead: 6
   - subType: 4
     timers:
-      timeNextState: 130
-      timeDried: 260
-      timeFlood: 50
-      timeDead: 320
+      timeNextState: 4
+      timeDried: 1
+      timeFlood: 5
+      timeDead: 5
   - subType: 5
     timers:
-      timeNextState: 50
-      timeDried: 100
-      timeFlood: 25
-      timeDead: 150
+      timeNextState: 2
+      timeDried: 1
+      timeFlood: 2
+      timeDead: 2
   - subType: 6
     timers:
-      timeNextState: 40
-      timeDried: 80
-      timeFlood: 20
-      timeDead: 120
+      timeNextState: 1
+      timeDried: 1
+      timeFlood: 2
+      timeDead: 1
   - subType: 7
     timers:
-      timeNextState: 70
-      timeDried: 140
-      timeFlood: 30
-      timeDead: 200
+      timeNextState: 2
+      timeDried: 1
+      timeFlood: 3
+      timeDead: 2
   - subType: 8
     timers:
-      timeNextState: 90
-      timeDried: 180
-      timeFlood: 40
-      timeDead: 240
+      timeNextState: 3
+      timeDried: 1
+      timeFlood: 2
+      timeDead: 2
   - subType: 9
     timers:
-      timeNextState: 35
-      timeDried: 70
-      timeFlood: 15
-      timeDead: 100
-  allPlantImages:
+      timeNextState: 7
+      timeDried: 1
+      timeFlood: 1
+      timeDead: 1
+  allPlantAssets:
   - subType: 0
     plantImages:
-      seedSprite: {fileID: 0}
+      seedSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
       plantSprite: {fileID: 0}
+    plantPrefabs:
+      seedPrefab: {fileID: 7360327402554462179, guid: 0e5ee9e4f38067547b53d0221bcf24ca, type: 3}
+      plantPrefab: {fileID: 0}

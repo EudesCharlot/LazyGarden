@@ -5,21 +5,22 @@ public class InteractManager : MonoBehaviour
 {
     public InputActionReference interactActionRef;
     public GameObject seedPrefab;
+    public InventoryManager inventoryManager;
+
+    [HideInInspector] public PlantSubType currentSeedSelector = PlantSubType.Null;
 
     private GameObject currentSeed;
-    private MeshCollider droneCollider;
     private seedManager currentSeedManager;
-    private bool isNearSeed = false; 
+    private bool isNearSeed = false;
 
     void OnEnable()
     {
-        interactActionRef.action.performed += OnInteract;
-        droneCollider = GetComponent<MeshCollider>();
+        if (interactActionRef != null) interactActionRef.action.performed += OnInteract;
     }
 
     void OnDisable()
     {
-        interactActionRef.action.performed -= OnInteract;
+        if (interactActionRef != null) interactActionRef.action.performed -= OnInteract;
     }
 
     void OnTriggerEnter(Collider other)
@@ -28,6 +29,8 @@ public class InteractManager : MonoBehaviour
         {
             isNearSeed = true;
             currentSeed = other.gameObject;
+            currentSeedManager = currentSeed.GetComponent<seedManager>();
+            Debug.Log($"🌱 Enter Seed: {currentSeedManager.subType}");
         }
     }
 
@@ -37,36 +40,59 @@ public class InteractManager : MonoBehaviour
         {
             isNearSeed = false;
             currentSeed = null;
+            currentSeedManager = null;
+            Debug.Log($"🌱 Exit Seed");
         }
     }
 
     void OnInteract(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed) return;
-        
-        if (isNearSeed && currentSeed != null)
+
+        if (isNearSeed && currentSeed != null && currentSeedManager != null)
         {
-            currentSeedManager = currentSeed.GetComponent<seedManager>();
             currentSeedManager.Interact();
             return;
         }
-        
+
         Collider[] nearbySeeds = Physics.OverlapSphere(transform.position, 0.5f);
         foreach (var col in nearbySeeds)
         {
             if (col.CompareTag("Seed"))
             {
-                Debug.Log("Impossible de planter ici : une graine est déjà présente !");
-                return;
+                var seed = col.GetComponent<seedManager>();
+                if (seed != null)
+                {
+                    seed.Interact();
+                    return;
+                }
             }
         }
 
-        Vector3 seedPos = new Vector3(transform.position.x, -15.8f, transform.position.z);
-        GameObject newSeed = Instantiate(seedPrefab, seedPos, Quaternion.identity);
-        newSeed.tag = "Seed";
-        currentSeed = newSeed;
-        currentSeedManager = currentSeed.GetComponent<seedManager>();
-        //currentSeedManager.subType = séléctionné par le joueur
-        Debug.Log("Nouvelle graine plantée !");
+        if (currentSeedSelector != PlantSubType.Null &&
+            inventoryManager.Consume(SlotType.Seed, currentSeedSelector, 1))
+        {
+            Vector3 seedPos = new Vector3(transform.position.x, -15.8f, transform.position.z);
+            GameObject newSeed = Instantiate(seedPrefab, seedPos, Quaternion.identity);
+            newSeed.tag = "Seed";
+            currentSeed = newSeed;
+            currentSeedManager = currentSeed.GetComponent<seedManager>();
+            currentSeedManager.subType = currentSeedSelector;
+
+            Debug.Log($"🌱 Nouvelle graine plantée : {currentSeedSelector}");
+        }
+        else
+        {
+            Debug.Log("⚠️ Aucune seed sélectionnée ou pas assez de ressources !");
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            OnInteract(new InputAction.CallbackContext());
+            Debug.Log("🖱️ Test Interact via Space");
+        }
     }
 }

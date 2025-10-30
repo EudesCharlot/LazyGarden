@@ -6,8 +6,8 @@ public class GameTimeManager : MonoBehaviour
     public static GameTimeManager Instance { get; private set; }
 
     [Header("Durée du cycle complet")]
-    public float dayDuration = 300f;   
-    public float nightDuration = 300f; 
+    public float dayDuration = 300f;
+    public float nightDuration = 300f;
 
     [Header("Heure de début")]
     [Range(0, 24)] public int startHour = 6;
@@ -21,10 +21,10 @@ public class GameTimeManager : MonoBehaviour
     private bool lastIsDay;
 
     private float accumulatedTime;
-    private float totalGameMinutes; 
+    private float totalGameMinutes;
     private float currentTimeSpeed = 1f;
 
-    public float CurrentTime => totalGameMinutes / 60f % 24f; 
+    public float CurrentTime => totalGameMinutes / 60f % 24f;
     public float SmoothGameMinutes => totalGameMinutes + accumulatedTime;
     public float SmoothCurrentTime => SmoothGameMinutes / 60f % 24f;
 
@@ -35,11 +35,12 @@ public class GameTimeManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-
-        totalGameMinutes = startHour * 60f + startMinute; 
+        
+        totalGameMinutes = startHour * 60f + startMinute;
         UpdateHourMinute();
         lastIsDay = IsDay;
         UpdateTimeSpeed();
+        Debug.Log($"⏰ GameTimeManager AWAKE: dayCounter={dayCounter}, time={GetTimeString()}");
     }
 
     void Update()
@@ -52,7 +53,7 @@ public class GameTimeManager : MonoBehaviour
             totalGameMinutes += minutesToAdd;
             accumulatedTime -= minutesToAdd;
             UpdateHourMinute();
-            UpdateTimeSpeed(); 
+            UpdateTimeSpeed();
 
             if (IsDay != lastIsDay)
             {
@@ -60,12 +61,12 @@ public class GameTimeManager : MonoBehaviour
                 lastIsDay = IsDay;
             }
         }
-        
+
         if (CurrentHour == 0 && !lastDayChecked)
         {
             dayCounter++;
             lastDayChecked = true;
-            Debug.Log("Jour " + dayCounter);
+            Debug.Log($"⏰ Nouveau jour: {dayCounter}");
         }
         else if (CurrentHour != 0)
         {
@@ -82,8 +83,8 @@ public class GameTimeManager : MonoBehaviour
 
     private void UpdateTimeSpeed()
     {
-        float gameDayHours = 15f; 
-        float gameNightHours = 9f; 
+        float gameDayHours = 15f;
+        float gameNightHours = 9f;
         currentTimeSpeed = IsDay ? (gameDayHours * 60f / dayDuration) : (gameNightHours * 60f / nightDuration);
     }
 
@@ -91,27 +92,25 @@ public class GameTimeManager : MonoBehaviour
     {
         return (totalGameMinutes % (24f * 60f)) / (24f * 60f);
     }
-    
+
     public string GetTimeString()
     {
-        int hours = Mathf.FloorToInt(CurrentTime); 
-        int minutes = Mathf.FloorToInt((CurrentTime - hours) * 60f); 
-
+        int hours = Mathf.FloorToInt(CurrentTime);
+        int minutes = Mathf.FloorToInt((CurrentTime - hours) * 60f);
         return string.Format("{0:00}:{1:00}", hours, minutes);
     }
-    
+
     public string GetTimeStringRounded()
     {
         int hours = Mathf.FloorToInt(CurrentTime);
-        
         int minutes = Mathf.FloorToInt((CurrentTime - hours) * 60f);
         minutes = (minutes / 10) * 10;
-
         return string.Format("{0}:{1:00}", hours, minutes);
     }
 
-    public int getDayCounter()
+    public int GetDayCounter()
     {
+        Debug.Log($"⏰ GetDayCounter: {dayCounter}");
         return dayCounter;
     }
 }

@@ -101,9 +101,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  plantType: 0
   subType: 0
-  gameValue: {fileID: 11400000, guid: dad1ef03d8d9e4440b4099a7ad687816, type: 2}
+  gameValue: {fileID: 11400000, guid: b8943b2c66e86324592be7a6bd2bea1d, type: 2}
+  timers:
+    timeNextState: 0
+    timeDried: 0
+    timeFlood: 0
+    timeDead: 0
 --- !u!136 &4342266823345446819
 CapsuleCollider:
   m_ObjectHideFlags: 0

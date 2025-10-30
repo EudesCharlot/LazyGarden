@@ -18,8 +18,7 @@ public class PlayerController : MonoBehaviour
 
         // Rotation sur l'axe Z
         transform.Rotate(0f, 0f, -rotateInput * rotateSpeed * Time.deltaTime, Space.Self);
-
-        // Sauvegarde de la position
+        
         string jsonPos = JsonUtility.ToJson(transform.position);
         PlayerPrefs.SetString("dronePos", jsonPos);
         PlayerPrefs.Save();

@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public enum SlotType
-{
-    Seed,
-    Plant
-}
+
+
 public class SlotManager : MonoBehaviour
 {
     private int stack;
