@@ -213,7 +213,7 @@ public class seedManager : MonoBehaviour
         if (currentVisual != null)
             Destroy(currentVisual);
 
-        var prefabs = gameValue.GetPrefabs(subType);
+        var prefabs = gameValue.GetPlantPrefab(subType);
         if (prefabs == null)
         {
             Debug.LogWarning($"⚠️ Aucun prefab pour {subType}");
