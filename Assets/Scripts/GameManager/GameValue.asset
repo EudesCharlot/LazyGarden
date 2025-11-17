@@ -15,9 +15,9 @@ MonoBehaviour:
   allPlantTimers:
   - subType: 0
     timers:
-      timeNextState: 1
+      timeNextState: 2
       timeDried: 1
-      timeFlood: 1
+      timeFlood: 2
       timeDead: 1
   - subType: 1
     timers:
@@ -73,11 +73,9 @@ MonoBehaviour:
       timeDried: 1
       timeFlood: 1
       timeDead: 1
-  allPlantAssets:
+  allPlantPrefabs:
   - subType: 0
-    plantImages:
+    plantPrefab: {fileID: 6259196773033297196, guid: a777a9a29d5880941a64be04a607afa8, type: 3}
+    images:
       seedSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
-      plantSprite: {fileID: 0}
-    plantPrefabs:
-      seedPrefab: {fileID: 7360327402554462179, guid: 0e5ee9e4f38067547b53d0221bcf24ca, type: 3}
-      plantPrefab: {fileID: 0}
+      plantSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
