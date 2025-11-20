@@ -17,10 +17,14 @@ public class seedManager : MonoBehaviour
     private int waterStreak;
     private PlantState healthyState;
     private int spawnDay;
-    private int consecutiveWateredDays;
-    private bool readyToGrow;
 
     private GameObject currentPlantModel;
+    private GameObject currentPrefabReference;
+
+    private bool HasGrown =>
+        healthyState == PlantState.Sprout ||
+        healthyState == PlantState.Seedling ||
+        healthyState == PlantState.Mature;
 
     void Awake()
     {
@@ -30,76 +34,69 @@ public class seedManager : MonoBehaviour
         gameTimeManager = GameTimeManager.Instance;
         if (gameTimeManager == null)
         {
-            Debug.LogError($"❌ {subType}: GameTimeManager null !");
+            Debug.LogError($"[seedManager] GameTimeManager manquant !");
             return;
         }
 
         timers = gameValue?.GetTimers(subType);
         if (timers == null)
         {
-            Debug.LogError($"❌ {subType}: timers null ! Using fallback.");
+            Debug.LogError($"[seedManager] Timers manquants pour {subType}");
             timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 2, timeDead = 2 };
         }
 
         int currentDay = gameTimeManager.GetDayCounter();
         spawnDay = currentDay;
-        dayLastWatered = currentDay - 1; // Permet arrosage jour 0
+        dayLastWatered = currentDay - 1;
         dayLastState = currentDay;
         dayLastHealthyState = currentDay;
         waterStreak = 0;
-        consecutiveWateredDays = 0;
-        readyToGrow = false;
 
-        UpdateVisual(); // Initialise avec cylindre visible
-
-        Debug.Log($"🚀 {subType} AWAKE: state={state}, day={currentDay}, timers={timers.timeNextState}/{timers.timeDried}/{timers.timeFlood}/{timers.timeDead}");
+        UpdateVisual();
+        Debug.Log($"[seedManager] {subType} créé | Jour {currentDay}");
     }
 
     void Update()
     {
         int currentDay = gameTimeManager.GetDayCounter();
-        Debug.Log($"📅 {subType} Jour {currentDay}: {state} | Water:{dayLastWatered} | State:{dayLastState} | Streak:{waterStreak} | Consecutive:{consecutiveWateredDays} | ReadyToGrow:{readyToGrow}");
 
-        if (state == PlantState.Dead) return;
+        if (state == PlantState.Dead || currentDay == spawnDay) return;
 
-        if (currentDay == spawnDay) return; // Protection spawn
-
-        if (currentDay - dayLastWatered > 1) // Gap arrosage
+        if (currentDay > dayLastState)
         {
-            consecutiveWateredDays = 0;
-            readyToGrow = false;
-        }
+            int previousDay = currentDay - 1;
 
-        if (state == PlantState.Flood && currentDay - dayLastState >= 1)
-        {
-            state = healthyState;
-            dayLastState = dayLastHealthyState;
-            UpdateVisual();
-            Debug.Log($"🌊 {subType} Récup Flood → {state}");
+            // Récup Flood
+            if (state == PlantState.Flood && currentDay - dayLastState >= 1)
+            {
+                state = healthyState;
+                dayLastState = dayLastHealthyState;
+                UpdateVisual();
+                Debug.Log($"[seedManager] {subType} récupéré du Flood");
+            }
+
+            // Croissance si arrosé hier
+            if (dayLastWatered == previousDay)
+            {
+                NextState(currentDay);
+            }
+            else
+            {
+                if (state != PlantState.Dried && state != PlantState.Flood)
+                {
+                    Dried(currentDay);
+                }
+            }
         }
 
         if (state == PlantState.Dried && currentDay - dayLastState >= timers.timeDead)
         {
             Dead(currentDay);
-            return;
-        }
-
-        if (readyToGrow && currentDay > dayLastState)
-        {
-            NextState(currentDay);
-            readyToGrow = false;
-            consecutiveWateredDays = 0;
-        }
-
-        if (state != PlantState.Dried && state != PlantState.Flood && currentDay - dayLastWatered >= timers.timeDried)
-        {
-            Dried(currentDay);
         }
     }
 
     public void Interact()
     {
-        Debug.Log($"🖱️ {subType} Interact: state={state}");
         if (state == PlantState.Mature)
         {
             Recolt();
@@ -111,42 +108,17 @@ public class seedManager : MonoBehaviour
     public void WaterPlant()
     {
         int currentDay = gameTimeManager.GetDayCounter();
-        if (currentDay == dayLastWatered)
-        {
-            waterStreak++;
-        }
-        else if (currentDay == dayLastWatered + 1)
-        {
-            waterStreak++;
-            consecutiveWateredDays++;
-        }
-        else
-        {
-            waterStreak = 1;
-            consecutiveWateredDays = 1;
-        }
-        dayLastWatered = currentDay;
-        Debug.Log($"💧 {subType} Arrosé Jour {currentDay}, Streak={waterStreak}, Consecutive={consecutiveWateredDays}");
-
-        if (consecutiveWateredDays >= timers.timeNextState)
-        {
-            readyToGrow = true;
-        }
 
         if (state == PlantState.Dead) return;
+
+        waterStreak = (currentDay == dayLastWatered) ? waterStreak + 1 : 1;
+        dayLastWatered = currentDay;
+
+        Debug.Log($"[seedManager] {subType} arrosé | Streak: {waterStreak}");
 
         if (state == PlantState.Flood)
         {
             Dead(currentDay);
-            return;
-        }
-
-        if (state == PlantState.Dried)
-        {
-            state = healthyState;
-            dayLastState = dayLastHealthyState;
-            UpdateVisual();
-            Debug.Log($"💧 {subType} Récup Dried → {state}");
             return;
         }
 
@@ -158,80 +130,118 @@ public class seedManager : MonoBehaviour
 
     void NextState(int currentDay)
     {
-        if (state == PlantState.Seed) state = PlantState.Sprout;
-        else if (state == PlantState.Sprout) state = PlantState.Seedling;
-        else if (state == PlantState.Seedling) state = PlantState.Mature;
-        else return;
+        PlantState next = healthyState switch
+        {
+            PlantState.Seed => PlantState.Sprout,
+            PlantState.Sprout => PlantState.Seedling,
+            PlantState.Seedling => PlantState.Mature,
+            _ => healthyState
+        };
 
+        if (next == healthyState) return;
+
+        healthyState = next;
+        state = healthyState;
         dayLastState = currentDay;
         dayLastHealthyState = currentDay;
-        healthyState = state;
+        waterStreak = 0;
+
         UpdateVisual();
-        Debug.Log($"🌱 {subType} → {state}");
+        Debug.Log($"[seedManager] {subType} → {state}");
     }
 
     void Flooded(int currentDay)
     {
-        healthyState = state;
         dayLastHealthyState = dayLastState;
         state = PlantState.Flood;
         dayLastState = currentDay;
         UpdateVisual();
-        Debug.Log($"🌊 {subType} FLOOD! Streak={waterStreak}");
+        Debug.Log($"[seedManager] {subType} FLOOD !");
     }
 
     void Dried(int currentDay)
     {
-        healthyState = state;
         dayLastHealthyState = dayLastState;
         state = PlantState.Dried;
         dayLastState = currentDay;
+        waterStreak = 0;
         UpdateVisual();
-        Debug.Log($"🌵 {subType} DRIED!");
+        Debug.Log($"[seedManager] {subType} DRIED !");
     }
 
     void Dead(int currentDay)
     {
         state = PlantState.Dead;
         UpdateVisual();
-        Debug.Log($"💀 {subType} DEAD!");
+        Debug.Log($"[seedManager] {subType} DEAD !");
     }
 
     void Recolt()
     {
-        Debug.Log($"🌾 {subType} RECOLT!");
+        Debug.Log($"[seedManager] {subType} récolté !");
         Destroy(gameObject);
     }
 
     private void UpdateVisual()
+{
+    if (!HasGrown)
     {
-        if (state == PlantState.Seed)
-        {
-            if (currentPlantModel) Destroy(currentPlantModel);
-            currentPlantModel = null;
-            GetComponent<MeshRenderer>().enabled = true; // Cylindre visible
-            return;
-        }
-
-        GetComponent<MeshRenderer>().enabled = false; // Cache cylindre
-
-        if (currentPlantModel == null)
-        {
-            GameObject prefab = gameValue.GetPlantPrefab(subType);
-            if (prefab == null) { Debug.LogError($"❌ {subType}: Pas de prefab !"); return; }
-            currentPlantModel = Instantiate(prefab, transform.position, transform.rotation, transform);
-        }
-
-        MeshRenderer renderer = currentPlantModel.GetComponentInChildren<MeshRenderer>();
-        if (renderer == null) { Debug.LogError($"❌ {subType}: Pas de renderer !"); return; }
-
-        Color color = state switch
-        {
-            PlantState.Flood => Color.blue,
-            PlantState.Dried => Color.yellow,
-            PlantState.Dead => Color.gray,
-            _ => Color.green
-        };
-        renderer.material.color = color;
+        if (currentPlantModel) Destroy(currentPlantModel);
+        currentPlantModel = null;
+        currentPrefabReference = null;
+        GetComponent<MeshRenderer>().enabled = true;
+        return;
     }
+    
+    GetComponent<MeshRenderer>().enabled = false;
+    
+    GameObject targetPrefab = healthyState == PlantState.Mature
+        ? gameValue.GetMaturePrefab(subType)
+        : gameValue.GetSproutPrefab(subType);
+
+    if (targetPrefab == null)
+    {
+        Debug.LogError($"[seedManager] Prefab manquant pour {subType} ({(healthyState == PlantState.Mature ? "Mature" : "Sprout")})");
+        return;
+    }
+    
+    if (currentPrefabReference != targetPrefab)
+    {
+        if (currentPlantModel) Destroy(currentPlantModel);
+
+        currentPlantModel = Instantiate(targetPrefab, transform.position, transform.rotation, transform);
+        currentPrefabReference = targetPrefab;
+        
+        if (healthyState == PlantState.Mature)
+        {
+            currentPlantModel.transform.localScale = Vector3.one * 0.01f;
+            LeanTween.scale(currentPlantModel, Vector3.one, 0.5f)
+                     .setEase(LeanTweenType.easeOutBack);
+        }
+    }
+    
+    MeshRenderer[] renderers = currentPlantModel.GetComponentsInChildren<MeshRenderer>();
+
+    Color col = state switch
+    {
+        PlantState.Flood => new Color(0.1f, 0.4f, 0.9f),
+        PlantState.Dried => new Color(0.85f, 0.7f, 0.3f),
+        PlantState.Dead  => new Color(0.35f, 0.35f, 0.35f),
+        _ => new Color(1f, 1f, 1f)
+    };
+
+    foreach (var r in renderers)
+    {
+        if (r.material.HasProperty("_BaseColor"))
+        {
+            r.material.SetColor("_BaseColor", col);
+        }
+        else
+        {
+            if (r.material.HasProperty("_Color"))
+                r.material.SetColor("_Color", col);
+        }
+    }
+}
+
 }

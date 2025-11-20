@@ -15,14 +15,14 @@ MonoBehaviour:
   allPlantTimers:
   - subType: 0
     timers:
-      timeNextState: 2
-      timeDried: 1
+      timeNextState: 10
+      timeDried: 2
       timeFlood: 2
       timeDead: 1
   - subType: 1
     timers:
       timeNextState: 5
-      timeDried: 1
+      timeDried: 4
       timeFlood: 6
       timeDead: 6
   - subType: 2
@@ -74,8 +74,27 @@ MonoBehaviour:
       timeFlood: 1
       timeDead: 1
   allPlantPrefabs:
-  - subType: 0
-    plantPrefab: {fileID: 6259196773033297196, guid: a777a9a29d5880941a64be04a607afa8, type: 3}
+  - subType: 5
+    sproutPrefab: {fileID: 1000013081511698, guid: 20a97bb13c3ef18478cf9c86535b1e9b, type: 3}
+    maturePrefab: {fileID: 1000011542004260, guid: 5ccf902a46d565441be630bd717cab9e, type: 3}
+    images:
+      seedSprite: {fileID: 21300000, guid: 75b7cd513a112c24098a71f368decee9, type: 3}
+      plantSprite: {fileID: 21300000, guid: 75b7cd513a112c24098a71f368decee9, type: 3}
+  - subType: 6
+    sproutPrefab: {fileID: 1000012844397656, guid: a97ffd75102541b46b48cffc80ef3da0, type: 3}
+    maturePrefab: {fileID: 1000012844397656, guid: ef1257a302d67714591337265ae3cc3d, type: 3}
+    images:
+      seedSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
+      plantSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
+  - subType: 7
+    sproutPrefab: {fileID: 1000011654160144, guid: fa6407b600577284bb8840b157c7d1e3, type: 3}
+    maturePrefab: {fileID: 1000013670052190, guid: f3a9c7ecfacfb2f4db788d6a3acdbf54, type: 3}
+    images:
+      seedSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
+      plantSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
+  - subType: 7
+    sproutPrefab: {fileID: 1000011654160144, guid: fa6407b600577284bb8840b157c7d1e3, type: 3}
+    maturePrefab: {fileID: 1000013670052190, guid: f3a9c7ecfacfb2f4db788d6a3acdbf54, type: 3}
     images:
       seedSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
       plantSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}

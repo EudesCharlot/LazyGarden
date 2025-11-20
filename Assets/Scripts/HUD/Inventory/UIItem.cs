@@ -10,14 +10,20 @@ public class UIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public SlotType slotType;
     public GameObject player;
 
-    private InteractManager interactManager;
-    private Image background;
-    private PlantImages plantImages;
-    private TextMeshProUGUI counterText;
+    [Header("UI References")]
+    public Image backgroundImage;
+    public Image slotImage; 
+    public TextMeshProUGUI counterText;
 
-    private Color normalColor = Color.white;
-    private Color hoverColor = new Color(0.8f, 0.8f, 1f);
-    private Color clickColor = new Color(0.6f, 0.6f, 1f);
+    private InteractManager interactManager;
+    private PlantImages plantImages;
+
+    private Color normalColor;
+    private Color hoverColor = new Color(0.8f, 0.8f, 1f);        
+    private Color selectedColor = new Color(0.6f, 0.6f, 1f);       
+    private Color hoverSelectedColor = new Color(0.7f, 0.7f, 1f);   
+
+    private bool isHovered = false;
 
     void Start()
     {
@@ -25,22 +31,28 @@ public class UIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             player = GameObject.FindGameObjectWithTag("Player");
 
         interactManager = player.GetComponent<InteractManager>();
-        background = GetComponentInChildren<Image>();
-        counterText = GetComponentInChildren<TextMeshProUGUI>();
+
+        if (backgroundImage != null)
+            normalColor = backgroundImage.color;
 
         plantImages = gameValue.GetImages(subType);
 
-        if (plantImages != null)
+        if (plantImages != null && slotImage != null)
         {
-            background.sprite = slotType == SlotType.Seed
+            slotImage.sprite = slotType == SlotType.Seed
                 ? plantImages.seedSprite
                 : plantImages.plantSprite;
         }
 
         UpdateCountUI();
+        UpdateBackgroundColor();
     }
 
-    void Update() => UpdateCountUI();
+    void Update()
+    {
+        UpdateCountUI();
+        UpdateBackgroundColor();
+    }
 
     private void UpdateCountUI()
     {
@@ -49,13 +61,34 @@ public class UIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         counterText.text = count.ToString();
     }
 
-    public void OnPointerEnter(PointerEventData _) => background.color = hoverColor;
-    public void OnPointerExit(PointerEventData _) => background.color = normalColor;
+    private void UpdateBackgroundColor()
+    {
+        if (backgroundImage == null) return;
+
+        if (interactManager.currentSeedSelector == subType)
+        {
+            backgroundImage.color = isHovered ? hoverSelectedColor : selectedColor;
+        }
+        else 
+        {
+            backgroundImage.color = isHovered ? hoverColor : normalColor;
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData _)
+    {
+        isHovered = true;
+        UpdateBackgroundColor();
+    }
+
+    public void OnPointerExit(PointerEventData _)
+    {
+        isHovered = false;
+        UpdateBackgroundColor();
+    }
 
     public void OnPointerClick(PointerEventData _)
     {
-        background.color = clickColor;
-
         if (slotType == SlotType.Seed)
         {
             interactManager.currentSeedSelector = subType;
@@ -65,5 +98,7 @@ public class UIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         {
             Debug.Log($"{slotType} {subType} cliqué mais non sélectionnable pour interaction.");
         }
+
+        UpdateBackgroundColor();
     }
 }

@@ -34,9 +34,9 @@ public enum PlantSubType
     Banana,
     Orange,
     Carrot,
-    Lettuce,
-    Cucumber,
-    Broccoli,
+    Corn,
+    Eggplant,
+    Turnip,
     GoldenCarrot,
     Null
 }
@@ -65,40 +65,34 @@ public class PlantImages
 }
 
 [System.Serializable]
-public class PlantPrefab
+public class PlantPrefabs 
 {
     public PlantSubType subType;
-    public GameObject plantPrefab; // prefab à instancier après Seed
+    public GameObject sproutPrefab;
+    public GameObject maturePrefab;
     public PlantImages images;
 }
 
 [CreateAssetMenu(fileName = "GameValue", menuName = "Scriptable Objects/GameValue")]
 public class GameValue : ScriptableObject
 {
-    public List<PlantSubTypeTimers> allPlantTimers = new List<PlantSubTypeTimers>()
-    {
-        new PlantSubTypeTimers { subType = PlantSubType.GoldenApple, timers = new PlantTimers { timeNextState = 1, timeDried = 1, timeFlood = 1, timeDead = 1 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Apple, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 6, timeDead = 6 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Cherry, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 5, timeDead = 4 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Banana, timers = new PlantTimers { timeNextState = 5, timeDried = 1, timeFlood = 6, timeDead = 6 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Orange, timers = new PlantTimers { timeNextState = 4, timeDried = 1, timeFlood = 5, timeDead = 5 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Carrot, timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 2, timeDead = 2 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Lettuce, timers = new PlantTimers { timeNextState = 1, timeDried = 1, timeFlood = 2, timeDead = 1 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Cucumber, timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 3, timeDead = 2 } },
-        new PlantSubTypeTimers { subType = PlantSubType.Broccoli, timers = new PlantTimers { timeNextState = 3, timeDried = 1, timeFlood = 2, timeDead = 2 } },
-        new PlantSubTypeTimers { subType = PlantSubType.GoldenCarrot, timers = new PlantTimers { timeNextState = 7, timeDried = 1, timeFlood = 1, timeDead = 1 } }
-    };
+    public List<PlantSubTypeTimers> allPlantTimers = new List<PlantSubTypeTimers>();
 
-    public List<PlantPrefab> allPlantPrefabs = new List<PlantPrefab>();
+    public List<PlantPrefabs> allPlantPrefabs = new List<PlantPrefabs>();
+    
+    public GameObject GetSproutPrefab(PlantSubType subtype)
+    {
+        return allPlantPrefabs.Find(p => p.subType == subtype)?.sproutPrefab;
+    }
+
+    public GameObject GetMaturePrefab(PlantSubType subtype)
+    {
+        return allPlantPrefabs.Find(p => p.subType == subtype)?.maturePrefab;
+    }
 
     public PlantTimers GetTimers(PlantSubType subtype)
     {
         return allPlantTimers.Find(p => p.subType == subtype)?.timers;
-    }
-
-    public GameObject GetPlantPrefab(PlantSubType subtype)
-    {
-        return allPlantPrefabs.Find(p => p.subType == subtype)?.plantPrefab;
     }
 
     public PlantImages GetImages(PlantSubType subtype)
