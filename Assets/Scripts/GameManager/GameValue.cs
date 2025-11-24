@@ -4,9 +4,7 @@ using System.Collections.Generic;
 public enum SlotType
 {
     Seed,
-    Plant,
-    Tool,
-    Item
+    Plant
 }
 
 public enum PlantState
@@ -30,13 +28,11 @@ public enum PlantSubType
 {
     GoldenApple,
     Apple,
-    Cherry,
     Banana,
     Orange,
     Carrot,
     Corn,
     Eggplant,
-    Turnip,
     GoldenCarrot,
     Null
 }

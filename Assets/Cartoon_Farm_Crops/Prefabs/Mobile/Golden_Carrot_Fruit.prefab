@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23000010346014566}
   - component: {fileID: 64000011310510212}
   m_Layer: 0
-  m_Name: Carrot_Fruit
+  m_Name: Golden_Carrot_Fruit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1000011542004260}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.058874, z: 0}
+  m_LocalPosition: {x: 0.111080885, y: -0.2245951, z: 0.051052094}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 29a286d2dc90be241a18e462c6b29a5c, type: 2}
+  - {fileID: 2100000, guid: 1d8ad3a809c27604b87effa48e5ccd14, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

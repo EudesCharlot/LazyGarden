@@ -15,9 +15,9 @@ MonoBehaviour:
   allPlantTimers:
   - subType: 0
     timers:
-      timeNextState: 10
+      timeNextState: 1
       timeDried: 2
-      timeFlood: 2
+      timeFlood: 3
       timeDead: 1
   - subType: 1
     timers:
@@ -46,14 +46,14 @@ MonoBehaviour:
   - subType: 5
     timers:
       timeNextState: 2
-      timeDried: 1
-      timeFlood: 2
+      timeDried: 2
+      timeFlood: 3
       timeDead: 2
   - subType: 6
     timers:
       timeNextState: 1
-      timeDried: 1
-      timeFlood: 2
+      timeDried: 2
+      timeFlood: 3
       timeDead: 1
   - subType: 7
     timers:
@@ -61,40 +61,28 @@ MonoBehaviour:
       timeDried: 1
       timeFlood: 3
       timeDead: 2
-  - subType: 8
-    timers:
-      timeNextState: 3
-      timeDried: 1
-      timeFlood: 2
-      timeDead: 2
-  - subType: 9
-    timers:
-      timeNextState: 7
-      timeDried: 1
-      timeFlood: 1
-      timeDead: 1
   allPlantPrefabs:
-  - subType: 5
+  - subType: 4
     sproutPrefab: {fileID: 1000013081511698, guid: 20a97bb13c3ef18478cf9c86535b1e9b, type: 3}
     maturePrefab: {fileID: 1000011542004260, guid: 5ccf902a46d565441be630bd717cab9e, type: 3}
     images:
       seedSprite: {fileID: 21300000, guid: 75b7cd513a112c24098a71f368decee9, type: 3}
       plantSprite: {fileID: 21300000, guid: 75b7cd513a112c24098a71f368decee9, type: 3}
-  - subType: 6
+  - subType: 5
     sproutPrefab: {fileID: 1000012844397656, guid: a97ffd75102541b46b48cffc80ef3da0, type: 3}
     maturePrefab: {fileID: 1000012844397656, guid: ef1257a302d67714591337265ae3cc3d, type: 3}
     images:
-      seedSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
-      plantSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
-  - subType: 7
+      seedSprite: {fileID: 21300000, guid: 63eded084377bb446b570daa534265a7, type: 3}
+      plantSprite: {fileID: 21300000, guid: 63eded084377bb446b570daa534265a7, type: 3}
+  - subType: 6
     sproutPrefab: {fileID: 1000011654160144, guid: fa6407b600577284bb8840b157c7d1e3, type: 3}
-    maturePrefab: {fileID: 1000013670052190, guid: f3a9c7ecfacfb2f4db788d6a3acdbf54, type: 3}
+    maturePrefab: {fileID: 1000011654160144, guid: 6abc2535bc6306146a05d9767fdd811a, type: 3}
     images:
-      seedSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
-      plantSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
+      seedSprite: {fileID: 21300000, guid: 20ea01b5312f6a347b471a85165050cb, type: 3}
+      plantSprite: {fileID: 21300000, guid: 20ea01b5312f6a347b471a85165050cb, type: 3}
   - subType: 7
-    sproutPrefab: {fileID: 1000011654160144, guid: fa6407b600577284bb8840b157c7d1e3, type: 3}
-    maturePrefab: {fileID: 1000013670052190, guid: f3a9c7ecfacfb2f4db788d6a3acdbf54, type: 3}
+    sproutPrefab: {fileID: 1000013081511698, guid: 20a97bb13c3ef18478cf9c86535b1e9b, type: 3}
+    maturePrefab: {fileID: 1000011542004260, guid: 5fc4f0812664c3e4aa43344667e99e17, type: 3}
     images:
-      seedSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
-      plantSprite: {fileID: 21300000, guid: b35125312182b374788fde5e65b00406, type: 3}
+      seedSprite: {fileID: 21300000, guid: ec13f43ef44484048ba5563bc1bdd90f, type: 3}
+      plantSprite: {fileID: 21300000, guid: ec13f43ef44484048ba5563bc1bdd90f, type: 3}
