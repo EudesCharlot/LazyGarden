@@ -171,19 +171,29 @@ public class seedManager : MonoBehaviour
         UpdateVisual();
         Debug.Log($"[seedManager] {subType} DRIED !");
     }
-
+    
     void Dead(int currentDay)
     {
         state = PlantState.Dead;
         UpdateVisual();
-        Debug.Log($"[seedManager] {subType} DEAD !");
     }
 
-    void Recolt()
+    public void Recolt()
     {
-        Debug.Log($"[seedManager] {subType} récolté !");
+        if (state != PlantState.Dead)
+        {
+            if (gameValue != null && gameValue.GetImages(subType) != null)
+            {
+                var interactManager = FindObjectOfType<InteractManager>();
+                if (interactManager != null && interactManager.inventoryManager != null)
+                {
+                    interactManager.inventoryManager.Add(SlotType.Plant, subType, 1);
+                }
+            }
+        }
         Destroy(gameObject);
     }
+
 
     private void UpdateVisual()
     {

@@ -17,7 +17,7 @@ public class InventoryManager : MonoBehaviour
     public int GetCount(SlotType slotType, PlantSubType subType)
     {
         var slot = slots.Find(s => s.slotType == slotType && s.subType == subType);
-        return slot != null ? slot.count : 0;
+        return slot?.count ?? 0;
     }
 
     public void Add(SlotType slotType, PlantSubType subType, int amount)

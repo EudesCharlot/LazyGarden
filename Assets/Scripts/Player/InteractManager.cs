@@ -30,7 +30,6 @@ public class InteractManager : MonoBehaviour
             isNearSeed = true;
             currentSeed = other.gameObject;
             currentSeedManager = currentSeed.GetComponent<seedManager>();
-            Debug.Log($"🌱 Enter Seed: {currentSeedManager.subType}");
         }
     }
 
@@ -41,7 +40,6 @@ public class InteractManager : MonoBehaviour
             isNearSeed = false;
             currentSeed = null;
             currentSeedManager = null;
-            Debug.Log($"🌱 Exit Seed");
         }
     }
 
@@ -79,11 +77,10 @@ public class InteractManager : MonoBehaviour
             currentSeedManager = currentSeed.GetComponent<seedManager>();
             currentSeedManager.subType = currentSeedSelector;
 
-            Debug.Log($"🌱 Nouvelle graine plantée : {currentSeedSelector}");
         }
         else
         {
-            Debug.Log("⚠️ Aucune seed sélectionnée ou pas assez de ressources !");
+            
         }
     }
 
@@ -92,7 +89,6 @@ public class InteractManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             OnInteract(new InputAction.CallbackContext());
-            Debug.Log("🖱️ Test Interact via Space");
         }
     }
 }
