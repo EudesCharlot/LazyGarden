@@ -70,7 +70,7 @@ public class InteractManager : MonoBehaviour
         if (currentSeedSelector != PlantSubType.Null &&
             inventoryManager.Consume(SlotType.Seed, currentSeedSelector, 1))
         {
-            Vector3 seedPos = new Vector3(transform.position.x, -15.8f, transform.position.z);
+            Vector3 seedPos = new Vector3(transform.position.x, -13.5f, transform.position.z);
             GameObject newSeed = Instantiate(seedPrefab, seedPos, Quaternion.identity);
             newSeed.tag = "Seed";
             currentSeed = newSeed;

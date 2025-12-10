@@ -66,7 +66,6 @@ public class GameTimeManager : MonoBehaviour
         {
             dayCounter++;
             lastDayChecked = true;
-            Debug.Log($"⏰ Nouveau jour: {dayCounter}");
         }
         else if (CurrentHour != 0)
         {
@@ -110,7 +109,6 @@ public class GameTimeManager : MonoBehaviour
 
     public int GetDayCounter()
     {
-        Debug.Log($"⏰ GetDayCounter: {dayCounter}");
         return dayCounter;
     }
 }

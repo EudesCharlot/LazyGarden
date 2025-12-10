@@ -150,7 +150,6 @@ public class seedManager : MonoBehaviour
         waterStreak = 0;
 
         UpdateVisual();
-        Debug.Log($"[seedManager] {subType} → {state} (Jour {currentDay})");
     }
 
     void Flooded(int currentDay)
@@ -182,12 +181,11 @@ public class seedManager : MonoBehaviour
     {
         if (state != PlantState.Dead)
         {
-            if (gameValue != null && gameValue.GetImages(subType) != null)
+            if (gameValue && gameValue.GetImages(subType) != null)
             {
-                var interactManager = FindObjectOfType<InteractManager>();
-                if (interactManager != null && interactManager.inventoryManager != null)
+                InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
                 {
-                    interactManager.inventoryManager.Add(SlotType.Plant, subType, 1);
+                    inventoryManager.Add(SlotType.Plant, subType, 1);
                 }
             }
         }
