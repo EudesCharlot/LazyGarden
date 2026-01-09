@@ -93,6 +93,19 @@ public class GameValue : ScriptableObject
 
     public PlantImages GetImages(PlantSubType subtype)
     {
-        return allPlantPrefabs.Find(p => p.subType == subtype)?.images;
+        foreach (var p in allPlantPrefabs)
+        {
+            if (p.subType == subtype)
+            {
+                if (p.images == null)
+                    Debug.LogError($"Images NULL pour {subtype}");
+
+                return p.images;
+            }
+        }
+
+        Debug.LogError($"Aucune entrée PlantPrefabs pour {subtype}");
+        return null;
     }
+
 }

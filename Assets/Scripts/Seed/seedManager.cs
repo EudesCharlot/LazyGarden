@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class seedManager : MonoBehaviour
 {
@@ -28,72 +29,53 @@ public class seedManager : MonoBehaviour
 
     void Awake()
     {
-        state = PlantState.Seed;
-        healthyState = PlantState.Seed;
-
         gameTimeManager = GameTimeManager.Instance;
         if (gameTimeManager == null)
         {
-            Debug.LogError($"[seedManager] GameTimeManager manquant !");
+            Debug.LogError("[seedManager] GameTimeManager manquant !");
             return;
         }
+
+        LoadPlantData();
 
         timers = gameValue?.GetTimers(subType);
         if (timers == null)
         {
-            Debug.LogError($"[seedManager] Timers manquants pour {subType}");
             timers = new PlantTimers { timeNextState = 2, timeDried = 1, timeFlood = 2, timeDead = 2 };
         }
 
-        int currentDay = gameTimeManager.GetDayCounter();
-        spawnDay = currentDay;
-        dayLastWatered = currentDay - 1;
-        dayLastState = currentDay;
-        dayLastHealthyState = currentDay;
-        waterStreak = 0;
-
         UpdateVisual();
-        Debug.Log($"[seedManager] {subType} créé | Jour {currentDay}");
     }
+
 
     void Update()
     {
         int currentDay = gameTimeManager.GetDayCounter();
-
         if (state == PlantState.Dead || currentDay == spawnDay) return;
 
         int daysSinceLastState = currentDay - dayLastState;
         int daysSinceLastWater = currentDay - dayLastWatered;
 
-        // Gestion Flood
         if (state == PlantState.Flood && daysSinceLastState >= 1)
         {
             state = healthyState;
             dayLastState = dayLastHealthyState;
             UpdateVisual();
-            Debug.Log($"[seedManager] {subType} récupéré du Flood");
         }
 
-        // Gestion Dried si pas arrosée depuis trop longtemps
         if (daysSinceLastWater >= timers.timeDried && state != PlantState.Dried && state != PlantState.Flood)
         {
             Dried(currentDay);
         }
 
-        // Gestion croissance si arrosée
         if (state != PlantState.Dried && state != PlantState.Flood && daysSinceLastWater < timers.timeDried)
         {
             if (daysSinceLastState >= timers.timeNextState)
-            {
                 NextState(currentDay);
-            }
         }
 
-        // Gestion mort si Dried trop longtemps
         if (state == PlantState.Dried && daysSinceLastState >= timers.timeDead)
-        {
             Dead(currentDay);
-        }
     }
 
     public void WaterPlant()
@@ -103,22 +85,14 @@ public class seedManager : MonoBehaviour
 
         waterStreak = (currentDay == dayLastWatered) ? waterStreak + 1 : 1;
         dayLastWatered = currentDay;
+        SavePlantData();
 
-        Debug.Log($"[seedManager] {subType} arrosé | Streak: {waterStreak}");
-
-        // Flood si trop arrosé
         if (waterStreak >= timers.timeFlood)
-        {
             Flooded(currentDay);
-        }
 
-        // Si était Flooded et arrosé → mort immédiate
         if (state == PlantState.Flood)
-        {
             Dead(currentDay);
-        }
     }
-
 
     public void Interact()
     {
@@ -129,7 +103,6 @@ public class seedManager : MonoBehaviour
         }
         WaterPlant();
     }
-    
 
     void NextState(int currentDay)
     {
@@ -148,7 +121,7 @@ public class seedManager : MonoBehaviour
         dayLastState = currentDay;
         dayLastHealthyState = currentDay;
         waterStreak = 0;
-
+        SavePlantData();
         UpdateVisual();
     }
 
@@ -157,8 +130,8 @@ public class seedManager : MonoBehaviour
         dayLastHealthyState = dayLastState;
         state = PlantState.Flood;
         dayLastState = currentDay;
+        SavePlantData();
         UpdateVisual();
-        Debug.Log($"[seedManager] {subType} FLOODED !");
     }
 
     void Dried(int currentDay)
@@ -167,31 +140,39 @@ public class seedManager : MonoBehaviour
         state = PlantState.Dried;
         dayLastState = currentDay;
         waterStreak = 0;
+        SavePlantData();
         UpdateVisual();
-        Debug.Log($"[seedManager] {subType} DRIED !");
     }
-    
+
     void Dead(int currentDay)
     {
         state = PlantState.Dead;
-        UpdateVisual();
+        SavePlantData();
+        if (!currentPlantModel)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        LeanTween.scale(currentPlantModel, Vector3.zero, 0.5f)
+            .setEase(LeanTweenType.easeInBack)
+            .setOnComplete(() =>
+            {
+                Destroy(currentPlantModel);
+                Destroy(gameObject);
+            });
     }
 
     public void Recolt()
     {
         if (state != PlantState.Dead)
         {
-            if (gameValue && gameValue.GetImages(subType) != null)
-            {
-                InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
-                {
-                    inventoryManager.Add(SlotType.Plant, subType, 1);
-                }
-            }
+            InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+            inventoryManager?.Add(SlotType.Plant, subType, 1);
         }
+        PlayerPrefs.DeleteKey(GetSaveKey());
         Destroy(gameObject);
     }
-
 
     private void UpdateVisual()
     {
@@ -214,25 +195,17 @@ public class seedManager : MonoBehaviour
             _ => null
         };
 
-        if (targetPrefab == null)
-        {
-            Debug.LogError($"[seedManager] Prefab manquant pour {subType} ({healthyState})");
-            return;
-        }
+        if (targetPrefab == null) return;
 
         if (currentPrefabReference != targetPrefab)
         {
             if (currentPlantModel) Destroy(currentPlantModel);
-
             currentPlantModel = Instantiate(targetPrefab, transform.position, transform.rotation, transform);
             currentPrefabReference = targetPrefab;
-
             Vector3 prefabScale = targetPrefab.transform.localScale;
-
-            // Animation pop
             currentPlantModel.transform.localScale = prefabScale * 0.01f;
             LeanTween.scale(currentPlantModel, prefabScale, 0.5f)
-                     .setEase(LeanTweenType.easeOutBack);
+                .setEase(LeanTweenType.easeOutBack);
         }
 
         MeshRenderer[] renderers = currentPlantModel.GetComponentsInChildren<MeshRenderer>();
@@ -252,4 +225,77 @@ public class seedManager : MonoBehaviour
                 r.material.SetColor("_Color", col);
         }
     }
+
+    private void SavePlantData()
+    {
+        string key = GetSaveKey();
+        PlayerPrefs.SetInt(key + "_state", (int)state);
+        PlayerPrefs.SetInt(key + "_healthy", (int)healthyState);
+        PlayerPrefs.SetInt(key + "_lastWatered", dayLastWatered);
+        PlayerPrefs.SetInt(key + "_lastState", dayLastState);
+        PlayerPrefs.SetInt(key + "_lastHealthyState", dayLastHealthyState);
+        PlayerPrefs.SetInt(key + "_streak", waterStreak);
+        PlayerPrefs.SetInt(key + "_spawnDay", spawnDay);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadPlantData()
+    {
+        string key = GetSaveKey();
+
+        if (!PlayerPrefs.HasKey(key + "_state"))
+        {
+            state = PlantState.Seed;
+            healthyState = PlantState.Seed;
+            dayLastWatered = 0;
+            dayLastState = 0;
+            dayLastHealthyState = 0;
+            waterStreak = 0;
+            spawnDay = GameTimeManager.Instance.GetDayCounter();
+            return;
+        }
+
+        state = (PlantState)PlayerPrefs.GetInt(key + "_state");
+        healthyState = (PlantState)PlayerPrefs.GetInt(key + "_healthy");
+        dayLastWatered = PlayerPrefs.GetInt(key + "_lastWatered");
+        dayLastState = PlayerPrefs.GetInt(key + "_lastState");
+        dayLastHealthyState = PlayerPrefs.GetInt(key + "_lastHealthyState");
+        waterStreak = PlayerPrefs.GetInt(key + "_streak");
+        spawnDay = PlayerPrefs.GetInt(key + "_spawnDay");
+    }
+
+
+    private string GetSaveKey()
+    {
+        return "plant_" + subType.ToString() + "_" + transform.position.GetHashCode();
+    }
+    
+    public PlantSaveManager.PlantData GetSaveData()
+    {
+        return new PlantSaveManager.PlantData
+        {
+            subType = subType,
+            state = state,
+            dayLastWatered = dayLastWatered,
+            dayLastState = dayLastState,
+            dayLastHealthyState = dayLastHealthyState,
+            waterStreak = waterStreak,
+            posX = transform.position.x,
+            posY = transform.position.y,
+            posZ = transform.position.z
+        };
+    }
+
+    public void SetSavedData(PlantSaveManager.PlantData data)
+    {
+        state = data.state;
+        dayLastWatered = data.dayLastWatered;
+        dayLastState = data.dayLastState;
+        dayLastHealthyState = data.dayLastHealthyState;
+        waterStreak = data.waterStreak;
+        transform.position = new Vector3(data.posX, data.posY, data.posZ);
+        UpdateVisual();
+    }
+
+
 }

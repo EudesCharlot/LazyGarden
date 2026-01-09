@@ -19,43 +19,43 @@ MonoBehaviour:
       timeDried: 2
       timeFlood: 3
       timeDead: 1
-  - subType: 1
+  - subType: 0
     timers:
       timeNextState: 5
       timeDried: 4
       timeFlood: 6
       timeDead: 6
-  - subType: 2
+  - subType: 0
     timers:
       timeNextState: 5
       timeDried: 1
       timeFlood: 5
       timeDead: 4
-  - subType: 3
+  - subType: 0
     timers:
       timeNextState: 5
       timeDried: 1
       timeFlood: 6
       timeDead: 6
-  - subType: 4
+  - subType: 0
     timers:
       timeNextState: 4
       timeDried: 1
       timeFlood: 5
       timeDead: 5
-  - subType: 5
+  - subType: 0
     timers:
       timeNextState: 2
       timeDried: 2
       timeFlood: 3
       timeDead: 2
-  - subType: 6
+  - subType: 0
     timers:
       timeNextState: 1
       timeDried: 2
       timeFlood: 3
       timeDead: 1
-  - subType: 7
+  - subType: 0
     timers:
       timeNextState: 2
       timeDried: 1

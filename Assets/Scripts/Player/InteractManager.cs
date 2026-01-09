@@ -7,20 +7,36 @@ public class InteractManager : MonoBehaviour
     public GameObject seedPrefab;
     public InventoryManager inventoryManager;
 
+    [Header("Sounds")]
+    public AudioClip plantWaterSound;
+    public AudioClip plantHarvestSound;
+    public AudioClip plantPlantSound;
+
+    private AudioSource audioSource;
+
     [HideInInspector] public PlantSubType currentSeedSelector = PlantSubType.Null;
 
     private GameObject currentSeed;
     private seedManager currentSeedManager;
     private bool isNearSeed = false;
 
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (!audioSource)
+            audioSource = gameObject.AddComponent<AudioSource>();
+    }
+
     void OnEnable()
     {
-        if (interactActionRef != null) interactActionRef.action.performed += OnInteract;
+        if (interactActionRef != null)
+            interactActionRef.action.performed += OnInteract;
     }
 
     void OnDisable()
     {
-        if (interactActionRef != null) interactActionRef.action.performed -= OnInteract;
+        if (interactActionRef != null)
+            interactActionRef.action.performed -= OnInteract;
     }
 
     void OnTriggerEnter(Collider other)
@@ -49,7 +65,16 @@ public class InteractManager : MonoBehaviour
 
         if (isNearSeed && currentSeed != null && currentSeedManager != null)
         {
-            currentSeedManager.Interact();
+            if (currentSeedManager.state == PlantState.Mature)
+            {
+                currentSeedManager.Recolt();
+                PlaySound(plantHarvestSound);
+            }
+            else
+            {
+                currentSeedManager.WaterPlant();
+                PlaySound(plantWaterSound);
+            }
             return;
         }
 
@@ -61,12 +86,21 @@ public class InteractManager : MonoBehaviour
                 var seed = col.GetComponent<seedManager>();
                 if (seed != null)
                 {
-                    seed.Interact();
+                    if (seed.state == PlantState.Mature)
+                    {
+                        seed.Recolt();
+                        PlaySound(plantHarvestSound);
+                    }
+                    else
+                    {
+                        seed.WaterPlant();
+                        PlaySound(plantWaterSound);
+                    }
                     return;
                 }
             }
         }
-
+        
         if (currentSeedSelector != PlantSubType.Null &&
             inventoryManager.Consume(SlotType.Seed, currentSeedSelector, 1))
         {
@@ -77,18 +111,21 @@ public class InteractManager : MonoBehaviour
             currentSeedManager = currentSeed.GetComponent<seedManager>();
             currentSeedManager.subType = currentSeedSelector;
 
-        }
-        else
-        {
-            
+            PlaySound(plantPlantSound);
         }
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             OnInteract(new InputAction.CallbackContext());
         }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip == null || audioSource == null) return;
+        audioSource.PlayOneShot(clip);
     }
 }

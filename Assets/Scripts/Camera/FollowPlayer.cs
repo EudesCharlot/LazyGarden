@@ -14,9 +14,7 @@ public class FollowPlayer : MonoBehaviour
     void Update()
     {
         droneSpeed = playerController.GetSpeed();
-        //Vector3 droneMovement = playerController.GetMovement() * (droneSpeed * Time.deltaTime);
-
-        //transform.localPosition -= droneMovement;
+        
         float distanceToVehicle = Vector3.Distance(transform.position, player.transform.position);
         
         transform.LookAt(player.transform);

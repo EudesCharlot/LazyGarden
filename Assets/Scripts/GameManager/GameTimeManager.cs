@@ -1,5 +1,5 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
 public class GameTimeManager : MonoBehaviour
 {
@@ -12,6 +12,9 @@ public class GameTimeManager : MonoBehaviour
     [Header("Heure de début")]
     [Range(0, 24)] public int startHour = 6;
     [Range(0, 59)] public int startMinute = 0;
+
+    [Header("Speed multiplier")]
+    public float speedMultiplier = 1f;
 
     public int CurrentHour { get; private set; }
     public int CurrentMinute { get; private set; }
@@ -31,21 +34,27 @@ public class GameTimeManager : MonoBehaviour
     public int dayCounter;
     private bool lastDayChecked = false;
 
+    private const string KEY_TOTAL_MINUTES = "GTM_TotalMinutes";
+    private const string KEY_DAY_COUNTER = "GTM_DayCounter";
+    private const string KEY_SPEED_MULTIPLIER = "GTM_SpeedMultiplier";
+
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        
-        totalGameMinutes = startHour * 60f + startMinute;
+
+        totalGameMinutes = PlayerPrefs.GetFloat(KEY_TOTAL_MINUTES, startHour * 60f + startMinute);
+        dayCounter = PlayerPrefs.GetInt(KEY_DAY_COUNTER, 0);
+        speedMultiplier = PlayerPrefs.GetFloat(KEY_SPEED_MULTIPLIER, 1f);
+
         UpdateHourMinute();
         lastIsDay = IsDay;
         UpdateTimeSpeed();
-        Debug.Log($"⏰ GameTimeManager AWAKE: dayCounter={dayCounter}, time={GetTimeString()}");
     }
 
     void Update()
     {
-        accumulatedTime += Time.deltaTime * currentTimeSpeed;
+        accumulatedTime += Time.deltaTime * currentTimeSpeed * speedMultiplier;
 
         int minutesToAdd = Mathf.FloorToInt(accumulatedTime);
         if (minutesToAdd > 0)
@@ -54,6 +63,7 @@ public class GameTimeManager : MonoBehaviour
             accumulatedTime -= minutesToAdd;
             UpdateHourMinute();
             UpdateTimeSpeed();
+            Save();
 
             if (IsDay != lastIsDay)
             {
@@ -66,6 +76,7 @@ public class GameTimeManager : MonoBehaviour
         {
             dayCounter++;
             lastDayChecked = true;
+            Save();
         }
         else if (CurrentHour != 0)
         {
@@ -85,6 +96,14 @@ public class GameTimeManager : MonoBehaviour
         float gameDayHours = 15f;
         float gameNightHours = 9f;
         currentTimeSpeed = IsDay ? (gameDayHours * 60f / dayDuration) : (gameNightHours * 60f / nightDuration);
+    }
+
+    private void Save()
+    {
+        PlayerPrefs.SetFloat(KEY_TOTAL_MINUTES, totalGameMinutes);
+        PlayerPrefs.SetInt(KEY_DAY_COUNTER, dayCounter);
+        PlayerPrefs.SetFloat(KEY_SPEED_MULTIPLIER, speedMultiplier);
+        PlayerPrefs.Save();
     }
 
     public float GetNormalizedTime()

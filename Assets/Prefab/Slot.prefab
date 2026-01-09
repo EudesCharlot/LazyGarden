@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameValue: {fileID: 11400000, guid: b8943b2c66e86324592be7a6bd2bea1d, type: 2}
-  subType: 10
+  subType: 7
   slotType: 0
   player: {fileID: 0}
   backgroundImage: {fileID: 3884675185263015404}
